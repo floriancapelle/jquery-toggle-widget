@@ -11,7 +11,7 @@ Animations work with CSS transitions. Events will publish state changes. Simple.
 
 ## License
 
-[MIT License](https://github.com/floriancapelle/jquery-flex-modal/blob/master/LICENSE)
+[MIT License](https://github.com/floriancapelle/jquery-toggle-widget/blob/master/LICENSE)
 
 ------------------
 

@@ -1,11 +1,6 @@
-/**
- * jQuery toggleWidget
- *
- * Use to show/hide (toggle) content like an accordion.
- * Animations work with CSS transitions. Events will publish state changes.
- *
- * @todo
- * - um ein inner element kürzen
+/*! jQuery toggleWidget - v0.1.0
+ * https://github.com/floriancapelle/jquery-toggle-widget
+ * Licensed MIT
  */
 (function( $ ) {
     'use strict';
