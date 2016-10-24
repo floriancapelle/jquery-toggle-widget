@@ -159,7 +159,7 @@
                 // remove attached events again after firing at least one
                 self._$toggleContent.off('transitionend.' + NAMESPACE + ' webkitTransitionEnd.' + NAMESPACE);
 
-                self._$el.trigger('afterOpen.' + NAMESPACE, this);
+                self._$el.trigger('afterOpen.' + NAMESPACE, self);
             });
 
             this._$el.addClass(this.conf.openClass);
@@ -185,7 +185,7 @@
                 // remove attached events again after firing at least one
                 self._$toggleContent.off('transitionend.' + NAMESPACE + ' webkitTransitionEnd.' + NAMESPACE);
 
-                self._$el.trigger('afterClose.' + NAMESPACE, this);
+                self._$el.trigger('afterClose.' + NAMESPACE, self);
             });
 
             this._$el.removeClass(this.conf.openClass);
@@ -234,7 +234,7 @@
             $htmlBody.animate({
                 scrollTop: this.getOffsetTop()
             }, this.conf.scrollDuration, function() {
-                self._$el.trigger('afterScrollToOffsetTop.' + NAMESPACE, this);
+                self._$el.trigger('afterScrollToOffsetTop.' + NAMESPACE, self);
             });
 
             return this;
