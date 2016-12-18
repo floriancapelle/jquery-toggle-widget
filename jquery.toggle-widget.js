@@ -1,4 +1,4 @@
-/*! jQuery toggleWidget - v0.1.0
+/*! jQuery toggleWidget - v0.2.0
  * https://github.com/floriancapelle/jquery-toggle-widget
  * Licensed MIT
  */
