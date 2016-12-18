@@ -13,7 +13,7 @@ Can't be simpler.
 - Requires jQuery 2+
 - Browser Support: Evergreen browsers & IE9+
 
-# TODO: CSS File
+# TODO: Demo and examples in index.html
 
 ## Demo
 
