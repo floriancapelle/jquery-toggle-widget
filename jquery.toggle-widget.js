@@ -19,12 +19,13 @@
      *
      * BE AWARE: When changing classes, style them with the least required styles as well (see the css file).
      *
-     * @property {bool} enabled - whether the plugin will be enabled (on startup), use enable/disable functions to manipulate this state
-     * @property {string|bool} toggleBtnSelector - will be used as DOM filter in the event handler. Set to false to disable event handling (and do it manually).
-     * @property {string|bool} toggleBtnTpl - toggle btn template, the btn will be appended to the root element if it doesn't exist on startup.
+     * @property {boolean} enabled - whether the plugin will be enabled (on startup), use enable/disable functions to manipulate this state
+     * @property {string|boolean} toggleBtnSelector - will be used as DOM filter in the event handler. Set to false to disable event handling (and do it manually).
+     * @property {string|boolean} toggleBtnTpl - toggle btn template, the btn will be appended to the root element if it doesn't exist on startup.
      *                                        Set to false to disable. Make sure to use at least the toggleBtnSelector as a class.
-     * @property {string|function} toggleContent - root element find() filter string or function to return the target toggle content element.
+     * @property {string|function} toggleContentSelector - root element find() filter string or function to return the target toggle content element.
      *                                             Function context is api, first argument root element.
+     *                                             'toggleContent' may be used, but is deprecated and will be removed.
      * @property {string} openClass - open state class
      * @property {number} offsetTopShift - shift the offset top value by this number before returning. Set to 0 to disable
      * @property {number} scrollDuration - scrollToOffsetTop animation duration
@@ -33,7 +34,7 @@
         enabled: true,
         toggleBtnSelector: 'toggle-widget__toggle-btn',
         toggleBtnTpl: '<button type="button" class="toggle-widget__toggle-btn"></button>',
-        toggleContent: '.toggle-widget__content',
+        toggleContentSelector: '.toggle-widget__content',
         openClass: 'toggle-widget--open',
         offsetTopShift: -20,
         scrollDuration: 300
@@ -102,10 +103,15 @@
             var self = this;
 
             this._$el = this.conf.targetElem;
-            if ( $.isFunction(this.conf.toggleContent) ) {
-                this._$toggleContent = this.conf.toggleContent.call(this, this._$el);
+            // ensure backwards compatibility
+            // @todo deprecated - remove in next major version
+            if ( this.conf.toggleContent && !this.conf.toggleContentSelector ) {
+                this.conf.toggleContentSelector = this.conf.toggleContent;
+            }
+            if ( $.isFunction(this.conf.toggleContentSelector) ) {
+                this._$toggleContent = this.conf.toggleContentSelector.call(this, this._$el);
             } else {
-                this._$toggleContent = this._$el.find(this.conf.toggleContent);
+                this._$toggleContent = this._$el.find(this.conf.toggleContentSelector);
             }
             this._$toggleContentInner = this._$toggleContent.children();
             this._isOpen = this._$el.hasClass(this.conf.openClass);
