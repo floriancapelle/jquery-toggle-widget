@@ -14,7 +14,37 @@
 <main class="page-content">
     <h1>jQuery toggleWidget Demo</h1>
 
+    <h2>Most Simple</h2>
+    <div class="demo-1 toggle-widget">
+        <div class="toggle-widget__content">
+            <div class="toggle-widget__content-inner">
+                Your content here ...
+            </div>
+        </div>
+    </div>
     
+    <h2>Custom Toggle Button</h2>
+    <div class="demo-2 toggle-widget">
+        <div class="toggle-widget__content">
+            <div class="toggle-widget__content-inner">
+                Your content here ...
+            </div>
+        </div>
+    </div>
+    
+    <h2>Fully customized</h2>
+    <div class="demo-3">
+        <div class="demo-3__header">
+            Header
+            
+            <button type="button" class="demo-3__toggle-btn">Toggle</button>
+        </div>
+        <div class="demo-3__content">
+            <div class="demo-3__content-inner">
+                Your content here ...
+            </div>
+        </div>
+    </div>
 </main>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
@@ -22,7 +52,13 @@
 
 <script>
     $(function( $ ) {
+        $('.toggle-widget').toggleWidget();
         
+        $('.demo-3').toggleWidget({
+            toggleBtnSelector: 'demo-3__toggle-btn',
+            toggleBtnTpl: false,
+            toggleContentSelector: 'demo-3__content'
+        });
     });
 </script>
 
