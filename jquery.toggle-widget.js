@@ -25,7 +25,7 @@
      */
     var defaults = {
         enabled: true,
-        toggleBtnSelector: 'toggle-widget__toggle-btn',
+        toggleBtnSelector: '.toggle-widget__toggle-btn',
         toggleContentSelector: '.toggle-widget__content',
         openClass: 'toggle-widget--open',
         offsetTopShift: -20,
