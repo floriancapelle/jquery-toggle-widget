@@ -1,0 +1,5 @@
+.toggle-widget__content {
+    height: 0;
+    transition: height .3s;
+    overflow: hidden;
+}

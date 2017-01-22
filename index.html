@@ -1,10 +1,71 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <title>jQuery toggleWidget - Demo page</title>
+
+    <link rel="stylesheet" href="jquery.toggle-widget.css">
+    <link rel="stylesheet" href="demo.css">
 </head>
 <body>
+
+<main class="page-content">
+    <h1>jQuery toggleWidget Demo</h1>
+
+    <div class="demo-1 toggle-widget">
+        <h2>Simple</h2>
+        <button type="button" class="demo-1__toggle-btn btn btn-default toggle-widget__toggle-btn">Toggle</button>
+
+        <div class="demo-1__content toggle-widget__content">
+            <div class="demo-1__content-inner toggle-widget__content-inner">
+                Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Cras ultricies ligula sed magna dictum porta. Pellentesque in ipsum id orci porta dapibus. Proin eget tortor risus. Quisque velit nisi, pretium ut lacinia in, elementum id enim. Quisque velit nisi, pretium ut lacinia in, elementum id enim. Donec sollicitudin molestie malesuada. Proin eget tortor risus.
+            </div>
+        </div>
+    </div>
+
+    <div class="demo-2 toggle-widget">
+        <div class="demo-2__header">
+            <h2>Advanced</h2>
+            <button type="button" class="demo-2__toggle-btn demo-2__toggle-btn--show btn btn-default toggle-widget__toggle-btn">Show</button>
+            <button type="button" class="demo-2__toggle-btn demo-2__toggle-btn--hide btn btn-default toggle-widget__toggle-btn">Hide</button>
+        </div>
+        <div class="demo-2__content toggle-widget__content">
+            <div class="demo-2__content-inner toggle-widget__content-inner">
+                Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Cras ultricies ligula sed magna dictum porta. Pellentesque in ipsum id orci porta dapibus. Proin eget tortor risus. Quisque velit nisi, pretium ut lacinia in, elementum id enim. Quisque velit nisi, pretium ut lacinia in, elementum id enim. Donec sollicitudin molestie malesuada. Proin eget tortor risus.
+            </div>
+        </div>
+    </div>
+
+    <div class="demo-3">
+        <div class="demo-3__header">
+            <h2 class="demo-3__header-headline">Customized</h2>
+
+            <button type="button" class="demo-3__toggle-btn btn btn-default">Toggle</button>
+        </div>
+        <div class="demo-3__content">
+            <div class="demo-3__content-inner">
+                Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Cras ultricies ligula sed magna dictum porta. Pellentesque in ipsum id orci porta dapibus. Proin eget tortor risus. Quisque velit nisi, pretium ut lacinia in, elementum id enim. Quisque velit nisi, pretium ut lacinia in, elementum id enim. Donec sollicitudin molestie malesuada. Proin eget tortor risus.
+            </div>
+        </div>
+    </div>
+</main>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script src="jquery.toggle-widget.js"></script>
+
+<script>
+    $(function( $ ) {
+        $('.toggle-widget').toggleWidget();
+
+        $('.demo-3').toggleWidget({
+            toggleBtnSelector: '.demo-3__toggle-btn',
+            toggleContentSelector: '.demo-3__content',
+            openClass: 'demo-3--open'
+        });
+    });
+</script>
 
 </body>
 </html>

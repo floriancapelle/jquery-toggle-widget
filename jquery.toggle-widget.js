@@ -1,4 +1,4 @@
-/*! jQuery toggleWidget - v0.2.0
+/*! jQuery toggleWidget - v1.0.0
  * https://github.com/floriancapelle/jquery-toggle-widget
  * Licensed MIT
  */
@@ -25,8 +25,7 @@
      */
     var defaults = {
         enabled: true,
-        toggleBtnSelector: 'toggle-widget__toggle-btn',
-        toggleBtnTpl: '<button type="button" class="toggle-widget__toggle-btn"></button>',
+        toggleBtnSelector: '.toggle-widget__toggle-btn',
         toggleContentSelector: '.toggle-widget__content',
         openClass: 'toggle-widget--open',
         offsetTopShift: -20,
@@ -109,11 +108,6 @@
             this._$toggleContentInner = this._$toggleContent.children();
             this._isOpen = this._$el.hasClass(this.conf.openClass);
             this._isEnabled = this.conf.enabled;
-
-            // append the toggle btn to the root element if configured and if it doesn't exist yet
-            if ( this.conf.toggleBtnTpl !== false && !this._$el.find(this.conf.toggleBtnSelector).length ) {
-                this._$el.append($(this.conf.toggleBtnTpl));
-            }
 
             this._$el.addClass('toggle-widget');
             this._$toggleContent.addClass('toggle-widget__content');
