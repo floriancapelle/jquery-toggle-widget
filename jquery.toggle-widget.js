@@ -144,13 +144,16 @@
 
             var contentInnerHeight = this.getContentInnerHeight();
 
+
+            // remove attached events from close function if called during animation
+            this._$toggleContent.off('.close.' + NAMESPACE);
             // BEWARE: multiple events for multiple properties fired. Cannot use ".one" as it is fired per event type.
-            this._$toggleContent.on('transitionend.' + NAMESPACE + ' webkitTransitionEnd.' + NAMESPACE, function( event ) {
+            this._$toggleContent.on('transitionend.open.' + NAMESPACE + ' webkitTransitionEnd.open.' + NAMESPACE, function( event ) {
                 if ( !self._$toggleContent.is(event.target) ) return;
 
                 self._$toggleContent.css('height', 'auto');
                 // remove attached events again after firing at least one
-                self._$toggleContent.off('transitionend.' + NAMESPACE + ' webkitTransitionEnd.' + NAMESPACE);
+                self._$toggleContent.off('.open.' + NAMESPACE);
 
                 self._$el.trigger('afterOpen.' + NAMESPACE, self);
             });
@@ -171,12 +174,14 @@
 
             var contentInnerHeight = this.getContentInnerHeight();
 
+            // remove attached events from open function if called during animation
+            this._$toggleContent.off('.open.' + NAMESPACE);
             // BEWARE: multiple events for multiple properties fired. Cannot use ".one" as it is fired per event type.
-            this._$toggleContent.on('transitionend.' + NAMESPACE + ' webkitTransitionEnd.' + NAMESPACE, function( event ) {
+            this._$toggleContent.on('transitionend.close.' + NAMESPACE + ' webkitTransitionEnd.close.' + NAMESPACE, function( event ) {
                 if ( !self._$toggleContent.is(event.target) ) return;
 
                 // remove attached events again after firing at least one
-                self._$toggleContent.off('transitionend.' + NAMESPACE + ' webkitTransitionEnd.' + NAMESPACE);
+                self._$toggleContent.off('.close.' + NAMESPACE);
 
                 self._$el.trigger('afterClose.' + NAMESPACE, self);
             });
