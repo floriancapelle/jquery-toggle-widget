@@ -13,8 +13,6 @@ Can't be simpler.
 - Requires jQuery 2+
 - Browser Support: Evergreen browsers & IE9+
 
-# TODO: Demo and examples in index.html
-
 ## Demo
 
 ![jQuery ToggleWidget Demo](https://raw.githubusercontent.com/floriancapelle/jquery-toggle-widget/master/demo.gif)
