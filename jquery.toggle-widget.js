@@ -144,6 +144,9 @@
 
             var contentInnerHeight = this.getContentInnerHeight();
 
+
+            // remove attached events from close function if called during animation
+            this._$toggleContent.off('.close.' + NAMESPACE);
             // BEWARE: multiple events for multiple properties fired. Cannot use ".one" as it is fired per event type.
             this._$toggleContent.on('transitionend.open.' + NAMESPACE + ' webkitTransitionEnd.open.' + NAMESPACE, function( event ) {
                 if ( !self._$toggleContent.is(event.target) ) return;
@@ -171,6 +174,8 @@
 
             var contentInnerHeight = this.getContentInnerHeight();
 
+            // remove attached events from open function if called during animation
+            this._$toggleContent.off('.open.' + NAMESPACE);
             // BEWARE: multiple events for multiple properties fired. Cannot use ".one" as it is fired per event type.
             this._$toggleContent.on('transitionend.close.' + NAMESPACE + ' webkitTransitionEnd.close.' + NAMESPACE, function( event ) {
                 if ( !self._$toggleContent.is(event.target) ) return;
