@@ -1,11 +1,17 @@
-/*! jQuery toggleWidget - v0.2.0
+/*! jQuery toggleWidget - v1.0.0
  * https://github.com/floriancapelle/jquery-toggle-widget
  * Licensed MIT
  */
-(function( $ ) {
+(function ( root, factory ) {
+    if ( typeof define === 'function' && define.amd ) {
+        // AMD. Register as an anonymous module.
+        define(['jquery'], factory);
+    } else {
+        // Browser globals
+        factory(jQuery);
+    }
+}(this, function ( $ ) {
     'use strict';
-
-    if ( $ === undefined ) return;
 
     /**
      * Plugin Namespace
@@ -14,26 +20,12 @@
     var NAMESPACE = 'toggleWidget';
 
     /**
-     * Default configuration
-     * Required configuration to ensure minimal functionality.
-     *
-     * BE AWARE: When changing classes, style them with the least required styles as well (see the css file).
-     *
-     * @property {boolean} enabled - whether the plugin will be enabled (on startup), use enable/disable functions to manipulate this state
-     * @property {string|boolean} toggleBtnSelector - will be used as DOM filter in the event handler. Set to false to disable event handling (and do it manually).
-     * @property {string|boolean} toggleBtnTpl - toggle btn template, the btn will be appended to the root element if it doesn't exist on startup.
-     *                                        Set to false to disable. Make sure to use at least the toggleBtnSelector as a class.
-     * @property {string|function} toggleContentSelector - root element find() filter string or function to return the target toggle content element.
-     *                                             Function context is api, first argument root element.
-     *                                             'toggleContent' may be used, but is deprecated and will be removed.
-     * @property {string} openClass - open state class
-     * @property {number} offsetTopShift - shift the offset top value by this number before returning. Set to 0 to disable
-     * @property {number} scrollDuration - scrollToOffsetTop animation duration
+     * Configuration
+     * @see https://github.com/floriancapelle/jquery-toggle-widget/blob/master/README.md for configuration details
      */
     var defaults = {
         enabled: true,
-        toggleBtnSelector: 'toggle-widget__toggle-btn',
-        toggleBtnTpl: '<button type="button" class="toggle-widget__toggle-btn"></button>',
+        toggleBtnSelector: '.toggle-widget__toggle-btn',
         toggleContentSelector: '.toggle-widget__content',
         openClass: 'toggle-widget--open',
         offsetTopShift: -20,
@@ -116,11 +108,6 @@
             this._$toggleContentInner = this._$toggleContent.children();
             this._isOpen = this._$el.hasClass(this.conf.openClass);
             this._isEnabled = this.conf.enabled;
-
-            // append the toggle btn to the root element if configured and if it doesn't exist yet
-            if ( this.conf.toggleBtnTpl !== false && !this._$el.find(this.conf.toggleBtnSelector).length ) {
-                this._$el.append($(this.conf.toggleBtnTpl));
-            }
 
             this._$el.addClass('toggle-widget');
             this._$toggleContent.addClass('toggle-widget__content');
@@ -259,4 +246,4 @@
         }
     };
 
-}(jQuery));
+}));
