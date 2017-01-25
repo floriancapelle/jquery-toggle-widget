@@ -1,4 +1,4 @@
-/*! jQuery toggleWidget - v1.0.1
+/*! jQuery toggleWidget - v1.0.2
  * https://github.com/floriancapelle/jquery-toggle-widget
  * Licensed MIT
  */
@@ -236,6 +236,10 @@
             });
 
             return this;
+        },
+
+        isOpen: function() {
+            return this._isOpen;
         },
 
         destroy: function() {
