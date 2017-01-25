@@ -52,6 +52,7 @@ disable | - | disable open/close functionality
 getOffsetTop | - | get offset top value shifted by 'offsetTopShift'
 getContentInnerHeight | - | get the height of the content-inner element (using jQuery.outerHeight)
 scrollToOffsetTop | - | scroll the viewport to the offset top position
+isOpen | - | returns whether the toggle is open
 destroy | - | remove all functionality, events and api from the toggle element
 
 ### Configuration
