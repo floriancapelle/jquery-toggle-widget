@@ -1,4 +1,4 @@
-/*! jQuery toggleWidget - v1.0.2
+/*! jQuery toggleWidget - v1.0.3
  * https://github.com/floriancapelle/jquery-toggle-widget
  * Licensed MIT
  */
@@ -15,7 +15,7 @@
 
     /**
      * Plugin Namespace
-     * Use to register api and events.
+     * Use to register module and events.
      */
     var NAMESPACE = 'toggleWidget';
 
@@ -35,224 +35,204 @@
     /**
      * Private variables/state
      * Variables not to be exposed, nor inherited or modified.
+     * e.g. shortcuts to dependencies or variables to spare memory.
      */
+    var conf;
     var $htmlBody;
 
     // DOM ready
     $(function() {
+        // apply custom config if present
+        conf = _.defaults({}, app.getConfig(NAMESPACE), defaults);
+
         $htmlBody = $('html, body');
 
         // append to jQuery prototype
         $.fn[NAMESPACE] = function( options ) {
-            // return prototype to enable modification
-            if ( options === 'getPrototype' ) {
-                return api.prototypes.default;
-            }
-
             return this.each(function() {
-                api.Factory(this, options);
+                var dataApi = $(this).data(NAMESPACE);
+                if ( dataApi ) {
+                    if ( options === 'destroy' && proto.isPrototypeOf(dataApi) ) {
+                        dataApi.destroy();
+                        return;
+                    } else {
+                        throw NAMESPACE + ' api already attached';
+                    }
+                }
+
+                ToggleWidget(_.extend({}, conf, options, {
+                    targetElem: this
+                }));
             });
         };
     });
 
-    var api = {
-        /**
-         * Factory
-         * Return new instances of an object with any arbitrary prototype you want.
-         * Depending on options supplied you may choose which object/functionality to return.
-         */
-        Factory: function( targetElem, options ) {
-            var $el = $(targetElem);
-            if ( !$el.length ) return;
+    // provide prototype as helper for checks
+    var proto = {};
 
-            var dataApi = $el.data(NAMESPACE);
-            if ( dataApi ) {
-                if ( options === 'destroy' && dataApi.isPrototypeOf(this.prototypes.default) ) {
-                    dataApi.destroy();
-                    return;
-                } else {
-                    throw NAMESPACE + ' api already attached';
-                }
-            }
+    var ToggleWidget = function( options ) {
+        var api;
+        var $el = $(options.targetElem);
+        if ( !$el.length ) return;
+        var isOpen = $el.hasClass(options.openClass);
+        var isEnabled = options.enabled;
+        var $toggleContent;
+        var $toggleContentInner;
 
-            var instance = Object.create(this.prototypes.default);
-
-            // apply custom config if present
-            instance.conf = $.extend({}, defaults, options, {
-                targetElem: $el
-            });
-
-            instance.init();
-
-            return instance;
-        },
-
-        prototypes: {}
-    };
-
-    api.prototypes.default = {
-        init: function() {
-            var self = this;
-
-            this._$el = this.conf.targetElem;
-            // ensure backwards compatibility
-            // @todo deprecated - remove in next major version
-            if ( this.conf.toggleContent && !this.conf.toggleContentSelector ) {
-                this.conf.toggleContentSelector = this.conf.toggleContent;
-            }
-            if ( $.isFunction(this.conf.toggleContentSelector) ) {
-                this._$toggleContent = this.conf.toggleContentSelector.call(this, this._$el);
-            } else {
-                this._$toggleContent = this._$el.find(this.conf.toggleContentSelector);
-            }
-            this._$toggleContentInner = this._$toggleContent.children();
-            this._isOpen = this._$el.hasClass(this.conf.openClass);
-            this._isEnabled = this.conf.enabled;
-
-            this._$el.addClass('toggle-widget');
-            this._$toggleContent.addClass('toggle-widget__content');
-
-            if ( this.conf.toggleBtnSelector !== false ) {
-                // attach the toggle btn event handler
-                this._$el.on('click.' + NAMESPACE, this.conf.toggleBtnSelector, function() {
-                    self.toggle();
-                });
-            }
-
-            // prepare open state on pageload
-            if ( this._isOpen ) {
-                self.open();
-            }
-
-            // disable initializing multiple times
-            this.init = function() {};
-
-            // expose api to data attribute
-            this._$el.data(NAMESPACE, this);
-
-            this._$el.trigger('afterInit.' + NAMESPACE, this);
-
-            return this;
-        },
-
-        open: function() {
-            var self = this;
-
-            if ( this._isEnabled === false ) return this;
-
-            this._$el.trigger('beforeOpen.' + NAMESPACE, this);
-
-            var contentInnerHeight = this.getContentInnerHeight();
-
-
-            // remove attached events from close function if called during animation
-            this._$toggleContent.off('.close.' + NAMESPACE);
-            // BEWARE: multiple events for multiple properties fired. Cannot use ".one" as it is fired per event type.
-            this._$toggleContent.on('transitionend.open.' + NAMESPACE + ' webkitTransitionEnd.open.' + NAMESPACE, function( event ) {
-                if ( !self._$toggleContent.is(event.target) ) return;
-
-                self._$toggleContent.css('height', 'auto');
-                // remove attached events again after firing at least one
-                self._$toggleContent.off('.open.' + NAMESPACE);
-
-                self._$el.trigger('afterOpen.' + NAMESPACE, self);
-            });
-
-            this._$el.addClass(this.conf.openClass);
-            this._$toggleContent.css('height', contentInnerHeight);
-            this._isOpen = true;
-
-            return this;
-        },
-
-        close: function() {
-            var self = this;
-
-            if ( this._isEnabled === false ) return this;
-
-            this._$el.trigger('beforeClose.' + NAMESPACE, this);
-
-            var contentInnerHeight = this.getContentInnerHeight();
-
-            // remove attached events from open function if called during animation
-            this._$toggleContent.off('.open.' + NAMESPACE);
-            // BEWARE: multiple events for multiple properties fired. Cannot use ".one" as it is fired per event type.
-            this._$toggleContent.on('transitionend.close.' + NAMESPACE + ' webkitTransitionEnd.close.' + NAMESPACE, function( event ) {
-                if ( !self._$toggleContent.is(event.target) ) return;
-
-                // remove attached events again after firing at least one
-                self._$toggleContent.off('.close.' + NAMESPACE);
-
-                self._$el.trigger('afterClose.' + NAMESPACE, self);
-            });
-
-            this._$el.removeClass(this.conf.openClass);
-            this._$toggleContent.css('height', contentInnerHeight);
-            // force layout
-            this._$toggleContent.css('height');
-            this._$toggleContent.css('height', '');
-            this._isOpen = false;
-
-            return this;
-        },
-
-        toggle: function() {
-            if ( this._isOpen === true ) {
-                return this.close();
-            } else {
-                return this.open();
-            }
-        },
-
-        enable: function() {
-            this._isEnabled = true;
-            return this;
-        },
-        disable: function() {
-            this._isEnabled = false;
-            return this;
-        },
-
-        getOffsetTop: function() {
-            var offsetTop = this._$el.offset().top;
-
-            // visual improvement
-            offsetTop += this.conf.offsetTopShift;
-
-            return offsetTop;
-        },
-
-        getContentInnerHeight: function() {
-            return this._$toggleContentInner.outerHeight();
-        },
-
-        scrollToOffsetTop: function() {
-            var self = this;
-
-            $htmlBody.animate({
-                scrollTop: this.getOffsetTop()
-            }, this.conf.scrollDuration, function() {
-                self._$el.trigger('afterScrollToOffsetTop.' + NAMESPACE, self);
-            });
-
-            return this;
-        },
-
-        isOpen: function() {
-            return this._isOpen;
-        },
-
-        destroy: function() {
-            // restore default state of DOM element
-            this._$el.removeClass(this.conf.openClass);
-            this._$toggleContent.css('height', '');
-
-            // remove attached event handlers
-            this._$el.off('.' + NAMESPACE);
-
-            // remove api from root element
-            this._$el.data(NAMESPACE, null);
+        // ensure backwards compatibility
+        // @todo deprecated - remove in next major version
+        if ( options.toggleContent && !options.toggleContentSelector ) {
+            options.toggleContentSelector = options.toggleContent;
         }
+        if ( $.isFunction(options.toggleContentSelector) ) {
+            $toggleContent = options.toggleContentSelector.call(this, $el);
+        } else {
+            $toggleContent = $el.find(options.toggleContentSelector);
+        }
+        $toggleContentInner = $toggleContent.children();
+
+        $el.addClass('toggle-widget');
+        $toggleContent.addClass('toggle-widget__content');
+
+        if ( options.toggleBtnSelector !== false ) {
+            // attach the toggle btn event handler
+            $el.on('click.' + NAMESPACE, options.toggleBtnSelector, function() {
+                api.toggle();
+            });
+        }
+
+        api = _.extend(Object.create(proto), {
+            open: function() {
+                var self = this;
+
+                if ( isEnabled === false ) return this;
+
+                $el.trigger('beforeOpen.' + NAMESPACE, this);
+
+                var contentInnerHeight = this.getContentInnerHeight();
+
+
+                // remove attached events from close function if called during animation
+                $toggleContent.off('.close.' + NAMESPACE);
+                // BEWARE: multiple events for multiple properties fired. Cannot use ".one" as it is fired per event type.
+                $toggleContent.on('transitionend.open.' + NAMESPACE + ' webkitTransitionEnd.open.' + NAMESPACE, function( event ) {
+                    if ( !$toggleContent.is(event.target) ) return;
+
+                    $toggleContent.css('height', 'auto');
+                    // remove attached events again after firing at least one
+                    $toggleContent.off('.open.' + NAMESPACE);
+
+                    $el.trigger('afterOpen.' + NAMESPACE, self);
+                });
+
+                $el.addClass(options.openClass);
+                $toggleContent.css('height', contentInnerHeight);
+                isOpen = true;
+
+                return this;
+            },
+
+            close: function() {
+                var self = this;
+
+                if ( isEnabled === false ) return this;
+
+                $el.trigger('beforeClose.' + NAMESPACE, this);
+
+                var contentInnerHeight = this.getContentInnerHeight();
+
+                // remove attached events from open function if called during animation
+                $toggleContent.off('.open.' + NAMESPACE);
+                // BEWARE: multiple events for multiple properties fired. Cannot use ".one" as it is fired per event type.
+                $toggleContent.on('transitionend.close.' + NAMESPACE + ' webkitTransitionEnd.close.' + NAMESPACE, function( event ) {
+                    if ( !$toggleContent.is(event.target) ) return;
+
+                    // remove attached events again after firing at least one
+                    $toggleContent.off('.close.' + NAMESPACE);
+
+                    $el.trigger('afterClose.' + NAMESPACE, self);
+                });
+
+                $el.removeClass(options.openClass);
+                $toggleContent.css('height', contentInnerHeight);
+                // force layout
+                $toggleContent.css('height');
+                $toggleContent.css('height', '');
+                isOpen = false;
+
+                return this;
+            },
+
+            toggle: function() {
+                if ( isOpen === true ) {
+                    return this.close();
+                } else {
+                    return this.open();
+                }
+            },
+
+            enable: function() {
+                isEnabled = true;
+                return this;
+            },
+            disable: function() {
+                isEnabled = false;
+                return this;
+            },
+
+            getOffsetTop: function() {
+                var offsetTop = $el.offset().top;
+
+                // visual improvement
+                offsetTop += options.offsetTopShift;
+
+                return offsetTop;
+            },
+
+            getContentInnerHeight: function() {
+                return $toggleContentInner.outerHeight();
+            },
+
+            scrollToOffsetTop: function() {
+                var self = this;
+
+                $htmlBody.animate({
+                    scrollTop: this.getOffsetTop()
+                }, options.scrollDuration, function() {
+                    $el.trigger('afterScrollToOffsetTop.' + NAMESPACE, self);
+                });
+
+                return this;
+            },
+
+            isOpen: function() {
+                return isOpen;
+            },
+
+            destroy: function() {
+                // restore default state of DOM element
+                $el.removeClass(options.openClass);
+                $toggleContent.css('height', '');
+
+                // remove attached event handlers
+                $el.off('.' + NAMESPACE);
+
+                // remove api from root element
+                $el.data(NAMESPACE, null);
+            }
+        });
+
+        // prepare open state on pageload
+        if ( isOpen ) {
+            api.open();
+        }
+
+        // expose api to data attribute
+        $el.data(NAMESPACE, api);
+
+        $el.trigger('afterInit.' + NAMESPACE, api);
+
+        return api;
     };
 
 }));
