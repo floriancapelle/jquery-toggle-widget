@@ -1,4 +1,4 @@
-/*! jQuery toggleWidget - v1.0.3
+/*! jQuery toggleWidget - v1.0.4
  * https://github.com/floriancapelle/jquery-toggle-widget
  * Licensed MIT
  */
@@ -37,7 +37,6 @@
      * Variables not to be exposed, nor inherited or modified.
      * e.g. shortcuts to dependencies or variables to spare memory.
      */
-    var conf;
     var $htmlBody;
 
     // DOM ready
