@@ -42,9 +42,6 @@
 
     // DOM ready
     $(function() {
-        // apply custom config if present
-        conf = _.defaults({}, app.getConfig(NAMESPACE), defaults);
-
         $htmlBody = $('html, body');
 
         // append to jQuery prototype
@@ -60,7 +57,7 @@
                     }
                 }
 
-                ToggleWidget(_.extend({}, conf, options, {
+                ToggleWidget(_.extend({}, defaults, options, {
                     targetElem: this
                 }));
             });
