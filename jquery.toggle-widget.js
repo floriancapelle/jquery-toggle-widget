@@ -1,4 +1,4 @@
-/*! jQuery toggleWidget - v1.0.4
+/*! jQuery toggleWidget - v1.0.5
  * https://github.com/floriancapelle/jquery-toggle-widget
  * Licensed MIT
  */
@@ -101,12 +101,12 @@
             open: function() {
                 var self = this;
 
+                if ( isOpen === true ) return this;
                 if ( isEnabled === false ) return this;
 
                 $el.trigger('beforeOpen.' + NAMESPACE, this);
 
                 var contentInnerHeight = this.getContentInnerHeight();
-
 
                 // remove attached events from close function if called during animation
                 $toggleContent.off('.close.' + NAMESPACE);
@@ -131,6 +131,7 @@
             close: function() {
                 var self = this;
 
+                if ( isOpen === false ) return this;
                 if ( isEnabled === false ) return this;
 
                 $el.trigger('beforeClose.' + NAMESPACE, this);
@@ -171,6 +172,7 @@
                 isEnabled = true;
                 return this;
             },
+
             disable: function() {
                 isEnabled = false;
                 return this;
@@ -220,7 +222,7 @@
 
         // prepare open state on pageload
         if ( isOpen ) {
-            api.open();
+            $toggleContent.css('height', 'auto');
         }
 
         // expose api to data attribute
