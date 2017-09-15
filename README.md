@@ -70,10 +70,6 @@ afterOpenClass | string | ```toggle-widget--after-open``` | after-open state cla
 offsetTopShift | number | -20 | shift the offset top value by this before returning. Set to 0 to disable.
 scrollDuration | number | 300 | scrollToOffsetTop() animation duration
 
-## License
-
-[MIT License](https://github.com/floriancapelle/jquery-toggle-widget/blob/master/LICENSE)
-
 ------------------
 
 ## Questions & Contribution
