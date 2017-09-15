@@ -1,4 +1,4 @@
-/*! jQuery toggleWidget - v1.0.5
+/*! jQuery toggleWidget - v1.0.6
  * https://github.com/floriancapelle/jquery-toggle-widget
  * Licensed MIT
  */
@@ -28,6 +28,7 @@
         toggleBtnSelector: '.toggle-widget__toggle-btn',
         toggleContentSelector: '.toggle-widget__content',
         openClass: 'toggle-widget--open',
+        afterOpenClass: 'toggle-widget--after-open',
         offsetTopShift: -20,
         scrollDuration: 300
     };
@@ -118,6 +119,7 @@
                     // remove attached events again after firing at least one
                     $toggleContent.off('.open.' + NAMESPACE);
 
+                    $el.addClass(options.afterOpenClass);
                     $el.trigger('afterOpen.' + NAMESPACE, self);
                 });
 
@@ -134,6 +136,7 @@
                 if ( isOpen === false ) return this;
                 if ( isEnabled === false ) return this;
 
+                $el.removeClass(options.afterOpenClass);
                 $el.trigger('beforeClose.' + NAMESPACE, this);
 
                 var contentInnerHeight = this.getContentInnerHeight();

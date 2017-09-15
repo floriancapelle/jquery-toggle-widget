@@ -66,12 +66,9 @@ enabled | boolean | true | whether the plugin will be enabled (on startup), use 
 toggleBtnSelector | string/boolean | ```toggle-widget__toggle-btn``` | will be used as DOM filter in the event handler. Set to false to disable event handling (and do it manually).
 toggleContentSelector | string/function | ```.toggle-widget__content``` | root element find() filter string or function to return the target toggle content element. Function context is api, first argument root element. 'toggleContent' may be used, but is deprecated and will be removed.
 openClass | string | ```toggle-widget--open``` | open state class
+afterOpenClass | string | ```toggle-widget--after-open``` | after-open state class
 offsetTopShift | number | -20 | shift the offset top value by this before returning. Set to 0 to disable.
 scrollDuration | number | 300 | scrollToOffsetTop() animation duration
-
-## License
-
-[MIT License](https://github.com/floriancapelle/jquery-toggle-widget/blob/master/LICENSE)
 
 ------------------
 
